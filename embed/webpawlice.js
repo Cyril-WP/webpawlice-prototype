@@ -111,7 +111,7 @@
       }
       return out;
     } catch (e) {
-      return [R('rdap', 'trust', 'Domain registration', 'skip', 'The .' + domain.split('.').pop() + ' registry publishes no public dates (true for .sg), so age and renewal are not readable.')];
+      return [R('rdap', 'trust', 'Domain registration', 'skip', 'The .' + domain.split('.').pop() + ' registry publishes no public registration dates, so age and renewal are not readable here.')];
     }
   }
 
@@ -120,6 +120,7 @@
       var rows = await getJson('https://api.certspotter.com/v1/issuances?domain=' + domain + '&include_subdomains=true&expand=dns_names', { timeout: 15000 });
       var names = {}; rows.forEach(function (r) { (r.dns_names || []).forEach(function (n) { names[n] = 1; }); });
       var list = Object.keys(names).filter(function (n) { return n.charAt(0) !== '*'; });
+      if (!rows.length) return [R('ct', 'safe', 'Certificates and hidden subdomains', 'info', 'No certificates in public logs name ' + domain + ' directly (it may share its host\'s certificate).')];
       return [R('ct', 'safe', 'Certificates and hidden subdomains', list.length > 25 ? 'warn' : 'info', rows.length + ' live certificates name ' + Object.keys(names).length + ' hosts, e.g. ' + list.slice(0, 5).join(', ') + '. Forgotten ones (old staging, test) are a common way in.')];
     } catch (e) {
       return [R('ct', 'safe', 'Certificates and hidden subdomains', 'skip', 'Certificate log did not answer (free limit is 100 lookups an hour).')];
@@ -129,8 +130,10 @@
   async function observatory() {
     try {
       // Must stay a "simple" POST: Observatory v2 rejects preflighted requests.
-      var r = await getJson('https://observatory-api.mdn.mozilla.net/api/v2/scan?host=' + (onSite ? location.hostname : domain), { method: 'POST', timeout: 30000 });
-      var g = (r.grade || 'F')[0];
+      var res = await fetch('https://observatory-api.mdn.mozilla.net/api/v2/scan?host=' + (onSite ? location.hostname : domain), { method: 'POST', credentials: 'omit' });
+      var r = await res.json();
+      if (!r.grade) return [R('observatory', 'safe', 'Mozilla security grade', 'skip', 'Mozilla Observatory could not grade the site: ' + (r.message || r.error || res.status) + '.')];
+      var g = r.grade[0];
       return [R('observatory', 'safe', 'Mozilla security grade', g === 'A' ? 'good' : g === 'B' || g === 'C' ? 'warn' : 'bad', 'Mozilla Observatory grades the site ' + r.grade + ' (' + r.score + '/100), ' + r.tests_passed + ' of ' + r.tests_quantity + ' tests passed.')];
     } catch (e) { return [R('observatory', 'safe', 'Mozilla security grade', 'skip', 'Mozilla Observatory did not answer.')]; }
   }
@@ -234,7 +237,13 @@
   }
 
   async function lookalikes(progress) {
-    var list = lookalikeList(), rows = [], i = 0, done = 0;
+    var list = lookalikeList(), rows = [], i = 0, done = 0, wild = {};
+    var endings = {}; list.forEach(function (d) { endings[d.slice(d.indexOf('.') + 1)] = 1; });
+    await Promise.all(Object.keys(endings).map(function (e) {
+      return doh('wpl-' + Math.random().toString(36).slice(2, 10) + '.' + e, 'A').then(function (r) { if ((r.Answer || []).length) wild[e] = 1; }, function () { /* ignore */ });
+    }));
+    var skipped = list.filter(function (d) { return wild[d.slice(d.indexOf('.') + 1)]; }).length;
+    list = list.filter(function (d) { return !wild[d.slice(d.indexOf('.') + 1)]; });
     async function worker() {
       while (i < list.length) {
         var d = list[i++];
@@ -250,8 +259,8 @@
     }
     await Promise.all([worker(), worker(), worker(), worker(), worker(), worker()]);
     var mail = rows.filter(function (r) { return r.mail; });
-    return [R('lookalikes', 'safe', 'Look-alike addresses', mail.length ? 'bad' : rows.length ? 'warn' : 'good',
-      list.length + ' addresses could pass for ' + domain + '. ' + rows.length + ' are registered by someone' + (rows.length ? ': ' + rows.slice(0, 5).map(function (r) { return r.d; }).join(', ') + (rows.length > 5 ? '…' : '') : '') + '.' + (mail.length ? ' ' + mail.length + ' can receive email, so they could be used to trick your customers.' : ''))];
+    return [R('lookalikes', 'safe', 'Look-alike addresses', !list.length ? 'skip' : mail.length ? 'bad' : rows.length ? 'warn' : 'good',
+      (skipped ? skipped + ' look-alikes sit under ' + Object.keys(wild).join(', ') + ', where every name answers, so they cannot be judged. ' : '') + list.length + ' addresses could pass for ' + domain + '. ' + rows.length + ' are registered by someone' + (rows.length ? ': ' + rows.slice(0, 5).map(function (r) { return r.d; }).join(', ') + (rows.length > 5 ? '…' : '') : '') + '.' + (mail.length ? ' ' + mail.length + ' can receive email, so they could be used to trick your customers.' : ''))];
   }
 
   function score(results) {
