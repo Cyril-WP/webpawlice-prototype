@@ -38,3 +38,16 @@ Passive only. No port scans, no load tests, no form submissions. Those need the 
 - `.sg` has no public RDAP, so domain age and renewal are not readable for most Singapore sites.
 - certspotter's free tier allows 100 lookups an hour per IP.
 - The embed and `extension/checks.js` duplicate the check logic. Fine for a prototype; one shared build if this goes further.
+
+## Four views (embed)
+
+- **Risks**: every finding ranked critical, high, medium or low, with why it matters and the fix. Adds leaked files, keys in page code, source maps, hijacked script hosts, libraries with published flaws (OSV.dev), WordPress core and plugin age, open databases and admin panels (Shodan InternetDB, free for non-commercial use only), forgotten subdomains, domain transfer lock, and look-alikes that are new since the last check.
+- **Launch guard**: walks up to 25 pages like a visitor and reports dead pages and images, noindex and robots blocks, staging addresses, placeholder text, insecure forms and dead outside links.
+- **Facts**: phone, hours, prices, address and reviews from every page and the structured data, and where they disagree.
+- **Compare**: public-record checks side by side with up to three competitors (`?webpawlice=site.sg&compare=a.sg,b.sg` or `data-competitors`).
+
+The demo bakery (`demo-site/`) carries deliberate faults for each view, including a fake `.env`.
+
+## Daily look-alike watch
+
+`.github/workflows/lookalike-watch.yml` runs `watch/watch.mjs` every day for the domains in `watch/domains.txt`, keeps what it saw in `watch/state.json`, and opens an issue when a new look-alike is registered or starts taking email.

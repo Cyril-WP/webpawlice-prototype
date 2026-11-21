@@ -1,0 +1,3 @@
+# Domains the daily look-alike watch covers, one per line.
+# Add client domains here. The first run records a baseline; later runs open an issue for anything new.
+python.org

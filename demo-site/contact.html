@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contact · Kopi &amp; Crumb</title>
+<!-- Deliberate launch leftovers for the WebPawlice demo: staging noindex and canonical, placeholder text,
+     a missing image, an insecure form address, and phone, hours and price that disagree with the homepage. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://staging.kopiandcrumb.sg/contact">
+<style>
+  body { margin: 0; font: 16px/1.6 Georgia, serif; background: #FBF7F1; color: #2B211A; }
+  .ribbon { background: #2344C4; color: #fff; font: 600 13px system-ui, sans-serif; padding: 8px 16px; text-align: center; }
+  .ribbon a { color: #fff; }
+  header, main, footer { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
+  .logo { font: 700 26px Georgia, serif; }
+  nav a { margin-right: 16px; color: #7A4B2A; }
+  form { display: grid; gap: 10px; max-width: 420px; }
+  input, textarea { font: inherit; padding: 10px; border: 1px solid #CDBBA8; border-radius: 8px; }
+  button { font: 600 15px system-ui; padding: 10px 16px; border: 0; border-radius: 8px; background: #7A4B2A; color: #fff; }
+  img { max-width: 100%; }
+  footer { color: #7A6656; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="ribbon">Demo client site with deliberate faults. <a href="./">Back to the homepage</a></div>
+<header><div class="logo">Kopi &amp; Crumb</div><nav><a href="./">Home</a><a href="./#menu">Menu</a></nav></header>
+<main>
+  <h1>Contact us</h1>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Our team replies within one working day.</p>
+  <img src="img/storefront.jpg" alt="Our shopfront on Seng Poh Lane">
+  <p>Call <a href="tel:+6561234576">+65 6123 4576</a> or email <a href="mailto:orders@kopiandcrumb.sg">orders@kopiandcrumb.sg</a>.</p>
+  <p>Open Mon–Fri 8am–6pm. 12 Seng Poh Lane, Singapore 160012.</p>
+  <ul><li>Office box (10 people) · $135</li></ul>
+  <form action="http://forms.kopiandcrumb.sg/submit" method="post" onsubmit="event.preventDefault()">
+    <label for="e">Email</label><input id="e" type="email">
+    <label for="m">Message</label><textarea id="m"></textarea>
+    <button type="submit">Send</button>
+  </form>
+</main>
+<footer>© 2023 Kopi &amp; Crumb. Fictional business for a Webpuppies prototype.</footer>
+</body>
+</html>

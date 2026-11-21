@@ -46,7 +46,7 @@
   <div class="hero">
     <span class="eyebrow">Webpuppies prototype · throwaway · 21 Nov 2026</span>
     <h1>WebPawlice</h1>
-    <p class="lede">One line on a client's site gives the owner a check-up built from public information: fake email, look-alike domains, certificates, protections, what AI assistants can read, speed, accessibility. Visitors never see it.</p>
+    <p class="lede">One line on a client's site gives the owner a check-up of their own website, worst risk first: leaked files, keys in page code, exposed databases, old software, fake email in their name, look-alike domains. Plus a launch walk-through, a facts check and a competitor comparison. Visitors never see it.</p>
     <div class="row">
       <a class="btn" href="demo-site/?webpawlice">See it on a client site</a>
       <a class="btn ghost" href="https://github.com/Cyril-WP/webpawlice-prototype">Code on GitHub</a>
@@ -84,29 +84,41 @@
   </section>
 
   <section>
+    <h2>Four views in one panel</h2>
+    <div class="grid">
+      <div class="card"><h3 style="margin:0">Risks</h3><p class="small muted">Every finding ranked critical, high, medium or low, with why it matters and the fix. Passed checks and non-security notes fold away.</p></div>
+      <div class="card"><h3 style="margin:0">Launch guard</h3><p class="small muted">Walks up to 25 pages like a visitor: dead pages and images, pages hidden from Google, staging leftovers, placeholder text, insecure forms, dead outside links.</p></div>
+      <div class="card"><h3 style="margin:0">Facts</h3><p class="small muted">Phone, hours, prices, address and reviews from every page and the search data, and every place the site contradicts itself.</p></div>
+      <div class="card"><h3 style="margin:0">Compare</h3><p class="small muted">The public-record checks for the site and up to three competitors, side by side. <a href="demo-site/?webpawlice=python.org&amp;compare=ruby-lang.org,rust-lang.org">Example</a>.</p></div>
+    </div>
+  </section>
+
+  <section>
     <h2>What it checks</h2>
     <div class="card tw"><table>
       <thead><tr><th>Check</th><th>Read from</th><th>Needs install</th></tr></thead>
       <tbody>
-        <tr><td>Fake email in your name (DMARC, SPF, MTA-STS)</td><td>Public DNS (Cloudflare, Google)</td><td>No</td></tr>
-        <tr><td>Signed DNS, who may issue certificates</td><td>Public DNS</td><td>No</td></tr>
-        <tr><td>Domain age and renewal date</td><td>Registry RDAP (not .sg)</td><td>No</td></tr>
-        <tr><td>Certificates and forgotten subdomains</td><td>Certificate Transparency (certspotter)</td><td>No</td></tr>
-        <tr><td>Look-alike domains registered, can take email</td><td>Generated list, resolved over DNS</td><td>No</td></tr>
-        <tr><td>Mozilla security grade</td><td>Mozilla HTTP Observatory</td><td>No</td></tr>
-        <tr><td>Popularity, first seen on the web</td><td>Tranco, Internet Archive</td><td>No</td></tr>
-        <tr><td>Protection headers, software versions announced</td><td>The site's own homepage</td><td>Yes</td></tr>
-        <tr><td>AI crawlers blocked, llms.txt, sitemap</td><td>The site's robots.txt</td><td>Yes</td></tr>
-        <tr><td>Title, description, structured facts, footer year</td><td>The page being viewed</td><td>Yes</td></tr>
-        <tr><td>Images without descriptions, unlabeled form fields, insecure items</td><td>The page being viewed</td><td>Yes</td></tr>
-        <tr><td>Load time and main-content time, other companies' code on the page</td><td>The browser's own timing</td><td>Yes</td></tr>
+        <tr><td>Leaked files: .env, .git, config backups, database dumps, debug logs</td><td>A dozen known paths on the site</td><td>Yes</td></tr>
+        <tr><td>API keys in page code, published source maps, scripts from hijacked hosts</td><td>The page and its own scripts</td><td>Yes</td></tr>
+        <tr><td>JavaScript libraries with published flaws</td><td>OSV.dev</td><td>Yes</td></tr>
+        <tr><td>WordPress core and plugins behind, removed plugins, user list, XML-RPC</td><td>WordPress.org</td><td>Yes</td></tr>
+        <tr><td>Login cookies readable by scripts, forms without encryption, security headers, end-of-life PHP</td><td>The site, endoflife.date</td><td>Yes</td></tr>
+        <tr><td>Open databases and admin panels, server software with known flaws</td><td>Shodan InternetDB</td><td>No</td></tr>
+        <tr><td>Fake email in your name (DMARC, SPF, MTA-STS)</td><td>Public DNS</td><td>No</td></tr>
+        <tr><td>Forgotten subdomains pointing at services that no longer exist</td><td>Certificate logs and DNS</td><td>No</td></tr>
+        <tr><td>Domain renewal, transfer lock, age</td><td>Registry RDAP (not .sg)</td><td>No</td></tr>
+        <tr><td>Look-alike domains, which take email, what is new since the last check</td><td>Generated list over DNS; daily watch in GitHub Actions</td><td>No</td></tr>
+        <tr><td>Mozilla security grade, signed DNS, certificate issuers</td><td>Mozilla Observatory, public DNS</td><td>No</td></tr>
+        <tr><td>AI crawlers, llms.txt, sitemap, titles, structured data, alt text, labels, speed</td><td>The site and the browser</td><td>Yes</td></tr>
       </tbody></table></div>
+    <p class="small muted">Read-only: it never submits forms, never logs in and never sends load. Leaked files are reported by name; their contents are never shown or kept.</p>
   </section>
 
   <section>
     <h2>Also in the repo</h2>
     <div class="grid">
       <div class="card"><h3 style="margin:0">Chrome extension</h3><p class="small muted">Same idea for the Webpuppies team: click the paw on any site. Load <code>extension/</code> unpacked.</p></div>
+      <div class="card"><h3 style="margin:0">Daily look-alike watch</h3><p class="small muted">GitHub Actions checks the domains in <code>watch/domains.txt</code> every day and opens an issue when a new look-alike is registered.</p></div>
       <div class="card"><h3 style="margin:0">Command line</h3><p class="small muted"><code>node cli.mjs site.sg --json</code> for sales calls and bulk checks of a prospect list.</p></div>
     </div>
   </section>

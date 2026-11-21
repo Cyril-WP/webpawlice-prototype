@@ -4,12 +4,47 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Kopi &amp; Crumb · demo client site</title>
+<meta name="description" content="Fictional Singapore bakery used to demonstrate WebPawlice.">
+<!--
+  Deliberate faults so the check-up has something real to find. All values are fake.
+  - an old jQuery from a CDN with no integrity check (known XSS advisories)
+  - Amazon's documentation example key in page code, and a session cookie readable by scripts
+  - a leaked .env file next to this page
+  - images without alt text, an unlabeled field, an old footer year
+  - contact.html disagrees with this page on phone, hours and price, and was left on staging settings
+-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+  window.KOPI_CONFIG = { photoBucket: 'kopi-crumb-photos', awsKeyId: 'AKIAIOSFODNN7EXAMPLE' };
+  document.cookie = 'kc_session=demo-not-real; path=/; SameSite=Lax';
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Bakery",
+  "name": "Kopi & Crumb",
+  "telephone": "+65 6123 4567",
+  "email": "hello@kopiandcrumb.sg",
+  "address": { "@type": "PostalAddress", "streetAddress": "12 Seng Poh Lane", "addressLocality": "Singapore", "postalCode": "160012" },
+  "openingHours": "Mo-Sa 08:00-18:00",
+  "makesOffer": { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Office box (10 people)" }, "price": "120", "priceCurrency": "SGD" },
+  "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.3", "reviewCount": "6" },
+  "review": [
+    { "@type": "Review", "author": { "@type": "Person", "name": "Mei L." }, "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "reviewBody": "The kaya croissant is the best thing in Tiong Bahru. Office box arrived warm at 9am." },
+    { "@type": "Review", "author": { "@type": "Person", "name": "Daniel T." }, "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "reviewBody": "Ordered for 30 people, everything labelled, the pandan chiffon went first." },
+    { "@type": "Review", "author": { "@type": "Person", "name": "Priya S." }, "reviewRating": { "@type": "Rating", "ratingValue": "4" }, "reviewBody": "Lovely bakes but the website said open Saturday and the shop was closed." },
+    { "@type": "Review", "author": { "@type": "Person", "name": "Jon K." }, "reviewRating": { "@type": "Rating", "ratingValue": "3" }, "reviewBody": "Charged $135 for the office box when the menu online says $120. Staff fixed it but it was awkward." },
+    { "@type": "Review", "author": { "@type": "Person", "name": "Aisha R." }, "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "reviewBody": "Friendly team, quick replies on WhatsApp, gluten-free options are real, not an afterthought." },
+    { "@type": "Review", "author": { "@type": "Person", "name": "Wei Ming" }, "reviewRating": { "@type": "Rating", "ratingValue": "4" }, "reviewBody": "Great coffee. Called the number on the contact page and it was wrong, had to walk in." }
+  ]
+}
+</script>
 <style>
   body { margin: 0; font: 16px/1.6 Georgia, serif; background: #FBF7F1; color: #2B211A; }
   .ribbon { background: #2344C4; color: #fff; font: 600 13px system-ui, sans-serif; padding: 8px 16px; text-align: center; }
   .ribbon a { color: #fff; }
   header, main, footer { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
-  header { display: flex; justify-content: space-between; align-items: center; }
+  header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
   .logo { font: 700 26px Georgia, serif; }
   nav a { margin-left: 16px; color: #7A4B2A; }
   .hero { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items: center; }
@@ -24,12 +59,11 @@
 </style>
 </head>
 <body>
-<div class="ribbon">Demo client site with WebPawlice installed. Press the blue paw, bottom right. <a href="../">What is this?</a></div>
-<header><div class="logo">Kopi &amp; Crumb</div><nav><a href="#menu">Menu</a><a href="#order">Order</a></nav></header>
+<div class="ribbon">Demo client site with deliberate faults and WebPawlice installed. Press the blue paw, bottom right. <a href="../">What is this?</a></div>
+<header><div class="logo">Kopi &amp; Crumb</div><nav><a href="#menu">Menu</a><a href="#order">Order</a><a href="contact.html">Contact</a><a href="about.html">Our story</a></nav></header>
 <main>
   <section class="hero">
     <div><h1>Small-batch bakes, delivered across Singapore.</h1><p>Order by 6pm for next-day delivery. Office boxes from 10 people.</p></div>
-    <!-- Deliberate faults below so the check-up has something real to find: images without alt text, an unlabeled field, an old footer year. -->
     <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 260'%3E%3Crect width='400' height='260' fill='%23E7C9A5'/%3E%3Ccircle cx='200' cy='130' r='80' fill='%23B9784A'/%3E%3C/svg%3E">
   </section>
   <section id="menu"><h2>This week</h2>
@@ -38,6 +72,10 @@
       <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23D9A877'/%3E%3C/svg%3E">
       <img alt="Pandan chiffon slice" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23A8C98A'/%3E%3C/svg%3E">
     </div>
+    <ul>
+      <li>Kaya croissant · $4.50</li>
+      <li>Office box (10 people) · $120</li>
+    </ul>
   </section>
   <section id="order"><h2>Order for the office</h2>
     <form onsubmit="event.preventDefault()">
@@ -47,8 +85,12 @@
       <button type="submit">Send order</button>
     </form>
   </section>
+  <section><h2>Visit</h2>
+    <p>12 Seng Poh Lane, Singapore 160012 · Mon–Sat 8am–6pm · <a href="tel:+6561234567">+65 6123 4567</a> · <a href="mailto:hello@kopiandcrumb.sg">hello@kopiandcrumb.sg</a></p>
+    <p>Our old online shop: <a href="https://shop.kopiandcrumb-old.invalid/">shop.kopiandcrumb-old</a></p>
+  </section>
 </main>
 <footer>© 2023 Kopi &amp; Crumb. Fictional business for a Webpuppies prototype.</footer>
-<script src="../embed/webpawlice.js" data-show="always" defer></script>
+<script src="../embed/webpawlice.js" data-show="always" data-root="./" defer></script>
 </body>
 </html>
