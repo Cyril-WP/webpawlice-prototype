@@ -210,9 +210,16 @@
     return out;
   }
 
+  // Tranco allows about one lookup a second, so lookups queue up instead of running in parallel.
+  var trancoQueue = Promise.resolve();
+  function tranco(d) {
+    var p = trancoQueue.then(function () { return getJson('https://tranco-list.eu/api/ranks/domain/' + d, { timeout: 8000 }); });
+    trancoQueue = p.catch(function () { /* next one still runs */ }).then(function () { return new Promise(function (r) { setTimeout(r, 1100); }); });
+    return p;
+  }
   async function rank(d) {
     try {
-      var r = await getJson('https://tranco-list.eu/api/ranks/domain/' + d, { timeout: 8000 });
+      var r = await tranco(d);
       var best = (r.ranks || []).map(function (x) { return x.rank; }).sort(function (a, b) { return a - b; })[0];
       return [R('rank', 'trust', 'How well-known', 'info', best ? 'Ranked #' + best.toLocaleString() + ' in the world top million (Tranco).' : 'Not in the world top million. Normal for a local business.', best ? '#' + best.toLocaleString() : 'not ranked')];
     } catch (e) { return []; }
@@ -715,7 +722,7 @@
   }
 
   // ---------------- compare ----------------
-  var ROWS = [['dmarc', 'Fake-email protection'], ['spf', 'Approved senders'], ['dnssec', 'Signed DNS'], ['caa', 'Certificate issuers locked'], ['ports', 'Exposed services'], ['observatory', 'Mozilla grade'], ['lock', 'Domain transfer lock'], ['expiry', 'Domain paid until'], ['age', 'Domain age'], ['rank', 'Popularity'], ['archive', 'Online since'], ['score', 'Public security score']];
+  var ROWS = [['dmarc', 'Fake-email protection'], ['spf', 'Approved senders'], ['dnssec', 'Signed DNS'], ['caa', 'Certificate issuers locked'], ['ports', 'Exposed services'], ['observatory', 'Mozilla grade'], ['lock', 'Domain transfer lock'], ['expiry', 'Domain renews in'], ['age', 'Domain age'], ['rank', 'Popularity'], ['archive', 'Online since'], ['score', 'Public security score']];
   async function profile(d) {
     var parts = await Promise.all([email(d), dnsHygiene(d), registry(d), observatory(d), exposedServices(d), rank(d), archive(d)].map(function (p) { return p.catch(function () { return []; }); }));
     var res = [].concat.apply([], parts), row = {};
@@ -812,8 +819,8 @@
       (passed.length ? '<details><summary>Passed · ' + passed.length + '</summary><ul class="list">' + passed.map(item).join('') + '</ul></details>' : '') +
       (other.length ? '<details><summary>Beyond security: search, AI, speed, access · ' + (report.other == null ? '–' : report.other) + '/100</summary><ul class="list">' + other.map(item).join('') + '</ul></details>' : '') +
       (skipped.length ? '<details><summary>Not run · ' + skipped.length + '</summary><ul class="list">' + skipped.map(item).join('') + '</ul></details>' : '');
-    $('.fab .lab').textContent = 'WebPawlice · ' + (b.urgent ? b.urgent + ' urgent' : 'no urgent risks');
   }
+  function fabLabel() { if (!report) return; var c = report.counts; $('.fab .lab').textContent = 'WebPawlice · ' + (c.critical + c.high ? (c.critical + c.high) + ' urgent' : 'no urgent risks'); }
 
   function needsInstall(what) { return '<p class="muted">' + what + ' reads the site\'s own pages, so it runs only when the script is installed on ' + esc(domain) + '. Try it on the demo site, or use Compare for public records.</p>'; }
 
@@ -872,13 +879,13 @@
     if (running) return;
     var key = 'webpawlice2:' + domain + ':' + onSite;
     if (!force) {
-      try { var c = JSON.parse(localStorage.getItem(key) || 'null'); if (c && Date.now() - c.t < CACHE_MS) { report = c.r; render(); setStep('Checked ' + new Date(c.t).toLocaleString() + '. Press "Check again" for a fresh check.'); return; } } catch (e) { /* storage blocked */ }
+      try { var c = JSON.parse(localStorage.getItem(key) || 'null'); if (c && Date.now() - c.t < CACHE_MS) { report = c.r; render(); fabLabel(); setStep('Checked ' + new Date(c.t).toLocaleString() + '. Press "Check again" for a fresh check.'); return; } } catch (e) { /* storage blocked */ }
     }
     running = true; $('.rescan').disabled = true;
     var results = thisPage();
     var steps = [['email', function () { return email(domain); }], ['DNS', function () { return dnsHygiene(domain); }], ['registry', function () { return registry(domain); }], ['certificate logs', function () { return certs(domain); }], ['Mozilla', function () { return observatory(onSite ? location.hostname : domain); }], ['exposed services', function () { return exposedServices(onSite ? location.hostname : domain); }], ['popularity', function () { return rank(domain); }], ['archive', function () { return archive(domain); }], ['site headers', siteHeaders], ['leaked files', leakedFiles], ['page code', pageCode], ['WordPress', wordpress], ['look-alikes', function () { return lookalikes(domain, function (d, t) { setStep('Looking up look-alike domains ' + d + '/' + t + '…'); }); }]];
     setStep('Checking ' + steps.map(function (s) { return s[0]; }).join(', ') + '…');
-    var update = function () { report = Object.assign({ tool: 'WebPawlice', domain: domain, scannedAt: new Date().toISOString(), installedHere: onSite, results: results }, score(results)); if (view === 'risks') render(); };
+    var update = function () { report = Object.assign({ tool: 'WebPawlice', domain: domain, scannedAt: new Date().toISOString(), installedHere: onSite, results: results }, score(results)); if (view === 'risks') render(); fabLabel(); };
     update();
     await Promise.all(steps.map(function (s) {
       return Promise.resolve().then(s[1]).then(function (rs) { results.push.apply(results, rs); }, function (e) { results.push(na(s[0], s[0], 'Could not run: ' + (e.message || e))); }).then(update);
