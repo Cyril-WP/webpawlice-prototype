@@ -132,7 +132,7 @@
       // Must stay a "simple" POST: Observatory v2 rejects preflighted requests.
       var res = await fetch('https://observatory-api.mdn.mozilla.net/api/v2/scan?host=' + (onSite ? location.hostname : domain), { method: 'POST', credentials: 'omit' });
       var r = await res.json();
-      if (!r.grade) return [R('observatory', 'safe', 'Mozilla security grade', 'skip', 'Mozilla Observatory could not grade the site: ' + (r.message || r.error || res.status) + '.')];
+      if (!r.grade) return [R('observatory', 'safe', 'Mozilla security grade', 'skip', 'Mozilla Observatory could not grade the site: ' + String(r.message || r.error || res.status).replace(/\.$/, '') + '.')];
       var g = r.grade[0];
       return [R('observatory', 'safe', 'Mozilla security grade', g === 'A' ? 'good' : g === 'B' || g === 'C' ? 'warn' : 'bad', 'Mozilla Observatory grades the site ' + r.grade + ' (' + r.score + '/100), ' + r.tests_passed + ' of ' + r.tests_quantity + ' tests passed.')];
     } catch (e) { return [R('observatory', 'safe', 'Mozilla security grade', 'skip', 'Mozilla Observatory did not answer.')]; }
@@ -260,7 +260,7 @@
     await Promise.all([worker(), worker(), worker(), worker(), worker(), worker()]);
     var mail = rows.filter(function (r) { return r.mail; });
     return [R('lookalikes', 'safe', 'Look-alike addresses', !list.length ? 'skip' : mail.length ? 'bad' : rows.length ? 'warn' : 'good',
-      (skipped ? skipped + ' look-alikes sit under ' + Object.keys(wild).join(', ') + ', where every name answers, so they cannot be judged. ' : '') + list.length + ' addresses could pass for ' + domain + '. ' + rows.length + ' are registered by someone' + (rows.length ? ': ' + rows.slice(0, 5).map(function (r) { return r.d; }).join(', ') + (rows.length > 5 ? '…' : '') : '') + '.' + (mail.length ? ' ' + mail.length + ' can receive email, so they could be used to trick your customers.' : ''))];
+      (skipped ? skipped + ' look-alikes sit under ' + Object.keys(wild).join(', ') + ', where every name answers, so they cannot be judged. ' : '') + list.length + ' addresses could pass for ' + domain + '. ' + rows.length + ' are registered by someone' + (rows.length ? ': ' + rows.slice(0, 5).map(function (r) { return r.d; }).join(', ') + (rows.length > 5 ? ' and more' : '') : '') + '.' + (mail.length ? ' ' + mail.length + ' can receive email, so they could be used to trick your customers.' : ''))];
   }
 
   function score(results) {
