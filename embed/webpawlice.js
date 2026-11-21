@@ -39,7 +39,7 @@
   var AI_BOTS = ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'PerplexityBot', 'Google-Extended', 'CCBot', 'Applebot-Extended'];
   var SEV = { critical: 0, high: 1, medium: 2, low: 3 };
   var SEV_LABEL = { critical: 'Critical', high: 'High', medium: 'Medium', low: 'Low' };
-  var PENALTY = { critical: 40, high: 20, medium: 8, low: 2 };
+  var PENALTY = { critical: 30, high: 15, medium: 5, low: 1 };
   var OTHER_AREAS = { found: 'Findability', works: 'Works for visitors', trust: 'Trust' };
   var ORDER = { bad: 0, warn: 1, info: 2, good: 3, skip: 4 };
   var LABEL = { good: 'Fine', warn: 'Improve', bad: 'Fix', info: 'Note', skip: 'Not run' };
@@ -553,7 +553,8 @@
     return (b.textContent || '').replace(/\s+/g, ' ');
   }
   function inScope(u) { try { var x = new URL(u, location.href); return x.origin === location.origin && x.pathname.indexOf(ROOT.pathname) === 0 && !/\.(pdf|jpe?g|png|gif|webp|svg|zip|mp4|mp3|docx?|xlsx?)$/i.test(x.pathname); } catch (e) { return false; } }
-  function norm(u) { var x = new URL(u, location.href); x.hash = ''; x.searchParams.delete('webpawlice'); x.searchParams.delete('compare'); return x.href; }
+  // Pages are keyed by path: query strings (tracking tags, ?webpawlice) would otherwise count one page twice.
+  function norm(u) { var x = new URL(u, location.href); x.hash = ''; x.search = ''; return x.href; }
 
   async function walk(progress) {
     if (crawl) return crawl;
