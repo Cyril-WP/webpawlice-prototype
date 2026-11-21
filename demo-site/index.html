@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kopi &amp; Crumb · demo client site</title>
+<style>
+  body { margin: 0; font: 16px/1.6 Georgia, serif; background: #FBF7F1; color: #2B211A; }
+  .ribbon { background: #2344C4; color: #fff; font: 600 13px system-ui, sans-serif; padding: 8px 16px; text-align: center; }
+  .ribbon a { color: #fff; }
+  header, main, footer { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
+  header { display: flex; justify-content: space-between; align-items: center; }
+  .logo { font: 700 26px Georgia, serif; }
+  nav a { margin-left: 16px; color: #7A4B2A; }
+  .hero { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items: center; }
+  .hero img, .grid img { width: 100%; border-radius: 12px; display: block; }
+  h1 { font-size: 40px; line-height: 1.1; margin: 0 0 12px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  form { display: grid; gap: 10px; max-width: 420px; }
+  input, textarea { font: inherit; padding: 10px; border: 1px solid #CDBBA8; border-radius: 8px; }
+  button { font: 600 15px system-ui; padding: 10px 16px; border: 0; border-radius: 8px; background: #7A4B2A; color: #fff; }
+  footer { color: #7A6656; font-size: 14px; }
+  @media (max-width: 640px) { .hero, .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="ribbon">Demo client site with WebPawlice installed. Press the blue paw, bottom right. <a href="../">What is this?</a></div>
+<header><div class="logo">Kopi &amp; Crumb</div><nav><a href="#menu">Menu</a><a href="#order">Order</a></nav></header>
+<main>
+  <section class="hero">
+    <div><h1>Small-batch bakes, delivered across Singapore.</h1><p>Order by 6pm for next-day delivery. Office boxes from 10 people.</p></div>
+    <!-- Deliberate faults below so the check-up has something real to find: images without alt text, an unlabeled field, an old footer year. -->
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 260'%3E%3Crect width='400' height='260' fill='%23E7C9A5'/%3E%3Ccircle cx='200' cy='130' r='80' fill='%23B9784A'/%3E%3C/svg%3E">
+  </section>
+  <section id="menu"><h2>This week</h2>
+    <div class="grid">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23F1D9B8'/%3E%3C/svg%3E">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23D9A877'/%3E%3C/svg%3E">
+      <img alt="Pandan chiffon slice" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23A8C98A'/%3E%3C/svg%3E">
+    </div>
+  </section>
+  <section id="order"><h2>Order for the office</h2>
+    <form onsubmit="event.preventDefault()">
+      <label for="n">Your name</label><input id="n">
+      <input placeholder="Email">
+      <textarea aria-label="What would you like?"></textarea>
+      <button type="submit">Send order</button>
+    </form>
+  </section>
+</main>
+<footer>© 2023 Kopi &amp; Crumb. Fictional business for a Webpuppies prototype.</footer>
+<script src="../embed/webpawlice.js" data-show="always" defer></script>
+</body>
+</html>

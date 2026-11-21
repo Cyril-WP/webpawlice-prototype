@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WebPawlice · prototype</title>
+<meta name="description" content="WebPawlice: a one-line embed that gives a website owner a check-up from public information. Prototype by Webpuppies.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #F3F5FA; --surface: #fff; --ink: #151A26; --muted: #5A6275; --line: #D9DDE6; --brand: #2344C4; --brandbg: #E6EBFB; --onbrand: #fff; color-scheme: light; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #0E1118; --surface: #161B25; --ink: #E8EBF2; --muted: #9BA3B5; --line: #283043; --brand: #8FA6FF; --brandbg: #1A2246; --onbrand: #0E1118; color-scheme: dark; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 Inter, system-ui, sans-serif; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 40px max(16px, env(safe-area-inset-right)) 80px max(16px, env(safe-area-inset-left)); display: grid; gap: 40px; }
+  h1, h2 { font-family: "Bricolage Grotesque", system-ui, sans-serif; margin: 0; letter-spacing: -.015em; text-wrap: balance; }
+  h1 { font-size: clamp(34px, 6vw, 56px); line-height: 1; }
+  h2 { font-size: 26px; line-height: 1.15; }
+  p { margin: 0; }
+  .eyebrow { font: 500 12px "JetBrains Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .lede { font-size: 19px; color: var(--muted); max-width: 60ch; }
+  section { display: grid; gap: 14px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: grid; gap: 12px; min-width: 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  pre { margin: 0; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; overflow-x: auto; font: 13px/1.6 "JetBrains Mono", monospace; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  input { font: 16px Inter, sans-serif; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; flex: 1 1 220px; min-width: 0; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; font: 600 15px Inter, sans-serif; border-radius: 10px; padding: 10px 16px; border: 1px solid var(--brand); background: var(--brand); color: var(--onbrand); text-decoration: none; cursor: pointer; }
+  .btn.ghost { background: none; color: var(--brand); }
+  .bm { border-style: dashed; }
+  .hero { background: var(--brandbg); border-radius: 22px; padding: 32px 24px; display: grid; gap: 16px; }
+  .hero .lede { color: var(--ink); }
+  .hero .eyebrow { color: var(--brand); }
+  .muted { color: var(--muted); }
+  .small { font-size: 14px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line); }
+  th { font: 500 11px "JetBrains Mono", monospace; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .tw { overflow-x: auto; }
+  :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+  ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <span class="eyebrow">Webpuppies prototype · throwaway · 21 Nov 2026</span>
+    <h1>WebPawlice</h1>
+    <p class="lede">One line on a client's site gives the owner a check-up built from public information: fake email, look-alike domains, certificates, protections, what AI assistants can read, speed, accessibility. Visitors never see it.</p>
+    <div class="row">
+      <a class="btn" href="demo-site/?webpawlice">See it on a client site</a>
+      <a class="btn ghost" href="https://github.com/Cyril-WP/webpawlice-prototype">Code on GitHub</a>
+    </div>
+  </div>
+
+  <section>
+    <h2>Put it on a site</h2>
+    <div class="card">
+      <p>Paste before <code>&lt;/body&gt;</code>. Nothing runs for visitors.</p>
+      <pre id="snippet"></pre>
+      <div class="row"><button class="btn ghost" type="button" id="copySnippet">Copy</button><span class="muted small" id="copied" aria-live="polite"></span></div>
+      <ol class="small">
+        <li>The owner opens their own site with <code>?webpawlice</code> on the end, e.g. <code>kopiandcrumb.sg/?webpawlice</code>.</li>
+        <li>A blue paw appears and runs the check-up. The result is kept for 12 hours in that browser.</li>
+        <li>WordPress: paste the line into any "header and footer scripts" setting, or use <code>wordpress/webpawlice.php</code> from the repo.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h2>Try it now</h2>
+    <div class="grid">
+      <div class="card">
+        <h3 style="margin:0">Any domain's public records</h3>
+        <p class="small muted">DNS, email protection, registry, certificates, Mozilla grade, look-alikes. Page checks need the script on that site.</p>
+        <form class="row" id="tryForm"><input id="tryDom" value="python.org" aria-label="Domain to check"><button class="btn" type="submit">Check</button></form>
+      </div>
+      <div class="card">
+        <h3 style="margin:0">Any site, full check, no install</h3>
+        <p class="small muted">Drag this to your bookmarks bar, open a site, press it. Works where the site allows outside scripts.</p>
+        <div class="row"><a class="btn ghost bm" id="bookmarklet" href="#">WebPawlice</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What it checks</h2>
+    <div class="card tw"><table>
+      <thead><tr><th>Check</th><th>Read from</th><th>Needs install</th></tr></thead>
+      <tbody>
+        <tr><td>Fake email in your name (DMARC, SPF, MTA-STS)</td><td>Public DNS (Cloudflare, Google)</td><td>No</td></tr>
+        <tr><td>Signed DNS, who may issue certificates</td><td>Public DNS</td><td>No</td></tr>
+        <tr><td>Domain age and renewal date</td><td>Registry RDAP (not .sg)</td><td>No</td></tr>
+        <tr><td>Certificates and forgotten subdomains</td><td>Certificate Transparency (certspotter)</td><td>No</td></tr>
+        <tr><td>Look-alike domains registered, can take email</td><td>Generated list, resolved over DNS</td><td>No</td></tr>
+        <tr><td>Mozilla security grade</td><td>Mozilla HTTP Observatory</td><td>No</td></tr>
+        <tr><td>Popularity, first seen on the web</td><td>Tranco, Internet Archive</td><td>No</td></tr>
+        <tr><td>Protection headers, software versions announced</td><td>The site's own homepage</td><td>Yes</td></tr>
+        <tr><td>AI crawlers blocked, llms.txt, sitemap</td><td>The site's robots.txt</td><td>Yes</td></tr>
+        <tr><td>Title, description, structured facts, footer year</td><td>The page being viewed</td><td>Yes</td></tr>
+        <tr><td>Images without descriptions, unlabeled form fields, insecure items</td><td>The page being viewed</td><td>Yes</td></tr>
+        <tr><td>Load time and main-content time, other companies' code on the page</td><td>The browser's own timing</td><td>Yes</td></tr>
+      </tbody></table></div>
+  </section>
+
+  <section>
+    <h2>Also in the repo</h2>
+    <div class="grid">
+      <div class="card"><h3 style="margin:0">Chrome extension</h3><p class="small muted">Same idea for the Webpuppies team: click the paw on any site. Load <code>extension/</code> unpacked.</p></div>
+      <div class="card"><h3 style="margin:0">Command line</h3><p class="small muted"><code>node cli.mjs site.sg --json</code> for sales calls and bulk checks of a prospect list.</p></div>
+    </div>
+  </section>
+</div>
+<script>
+  var src = new URL('embed/webpawlice.js', location.href).href;
+  document.getElementById('snippet').textContent = '<script src="' + src + '" defer><\/script>';
+  document.getElementById('copySnippet').onclick = function () {
+    navigator.clipboard.writeText(document.getElementById('snippet').textContent).then(function () { document.getElementById('copied').textContent = 'Copied.'; }, function () { document.getElementById('copied').textContent = 'Select the line and copy it.'; });
+  };
+  document.getElementById('tryForm').onsubmit = function (e) {
+    e.preventDefault();
+    var d = document.getElementById('tryDom').value.trim().toLowerCase().replace(/^[a-z]+:\/\//, '').replace(/^www\./, '').replace(/[/?#].*$/, '');
+    if (d) location.href = 'demo-site/?webpawlice=' + encodeURIComponent(d);
+  };
+  document.getElementById('bookmarklet').href = "javascript:(function(){if(window.WebPawlice){WebPawlice.open();return}var s=document.createElement('script');s.src='" + src + "';s.dataset.show='always';s.dataset.open='true';document.body.appendChild(s)})()";
+  document.getElementById('bookmarklet').onclick = function (e) { e.preventDefault(); this.textContent = 'Drag me to the bookmarks bar'; };
+</script>
+</body>
+</html>

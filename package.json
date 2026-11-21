@@ -1,0 +1,10 @@
+{
+  "name": "webpawlice-prototype",
+  "private": true,
+  "description": "PROTOTYPE: WebPawlice outside-in website check-up. Embed, Chrome extension, CLI.",
+  "type": "module",
+  "scripts": {
+    "demo": "python3 -m http.server 8731",
+    "scan": "node cli.mjs"
+  }
+}

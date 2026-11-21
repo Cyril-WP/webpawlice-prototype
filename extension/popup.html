@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WebPawlice</title>
+<style>
+  :root { --bg: #F4F6F5; --surface: #fff; --ink: #14201C; --muted: #5B6863; --line: #DCE3E0; --accent: #0F5A4A; --good: #1D7349; --warn: #8A5A00; --bad: #B42318; color-scheme: light; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #0F1513; --surface: #17201D; --ink: #E7EEEB; --muted: #9AA8A3; --line: #26312D; --accent: #7FD1BC; --good: #63C796; --warn: #F2BE4B; --bad: #FF8A7A; color-scheme: dark; } }
+  body { margin: 0; width: 380px; background: var(--bg); color: var(--ink); font: 13px/1.45 system-ui, sans-serif; }
+  header { padding: 16px 16px 6px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  h1 { font-size: 16px; margin: 0; color: var(--accent); letter-spacing: -.01em; }
+  #dom { color: var(--muted); font-family: ui-monospace, Menlo, monospace; font-size: 12px; overflow-wrap: anywhere; }
+  .bar { padding: 0 16px 12px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  button { font: 600 13px system-ui; border-radius: 8px; padding: 8px 12px; border: 1px solid var(--accent); background: var(--accent); color: var(--surface); cursor: pointer; }
+  button.ghost { background: none; color: var(--accent); }
+  button:disabled { opacity: .5; cursor: default; }
+  label { color: var(--muted); font-size: 12px; display: flex; gap: 4px; align-items: center; }
+  #step { padding: 0 16px 10px; color: var(--muted); font-family: ui-monospace, Menlo, monospace; font-size: 11px; min-height: 14px; }
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 4px 16px 20px; }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+  .tile b { display: block; font-size: 20px; font-variant-numeric: tabular-nums; }
+  .tile span { font-size: 10px; color: var(--muted); }
+  ul { list-style: none; margin: 0; padding: 0 16px 16px; display: grid; gap: 6px; }
+  li { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+  li b { font-weight: 600; }
+  .pill { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-right: 6px; }
+  .good { color: var(--good); } .warn { color: var(--warn); } .bad { color: var(--bad); } .info, .skip { color: var(--muted); }
+  footer { padding: 0 16px 14px; color: var(--muted); font-size: 11px; }
+</style>
+</head>
+<body>
+<header><h1>WebPawlice</h1><span id="dom">…</span></header>
+<div class="bar">
+  <button id="scan" type="button">Check this site</button>
+  <button id="copy" class="ghost" type="button" hidden>Copy report for AI write-up</button>
+  <label><input id="psi" type="checkbox"> Include Lighthouse (slow)</label>
+</div>
+<div id="step"></div>
+<div id="out"></div>
+<footer>Prototype. Public information only: DNS, registries, certificate logs, one normal page visit. No active testing.</footer>
+<script type="module" src="popup.js"></script>
+</body>
+</html>

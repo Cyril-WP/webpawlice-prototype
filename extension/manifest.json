@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "WebPawlice (prototype)",
+  "version": "0.1.0",
+  "description": "PROTOTYPE by Webpuppies. Passive outside-in check of the site you are on: email spoofing, look-alike domains, certificates, protections, AI readiness.",
+  "action": { "default_popup": "popup.html", "default_title": "WebPawlice: check this site" },
+  "background": { "service_worker": "background.js", "type": "module" },
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["https://web.archive.org/*"],
+  "optional_host_permissions": ["https://*/*", "http://*/*"]
+}
