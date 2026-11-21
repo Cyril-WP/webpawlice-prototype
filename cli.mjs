@@ -24,10 +24,12 @@ if (args.includes('--json')) {
   process.exit(0);
 }
 
+// Findings can quote text from the scanned site (its page title), so strip terminal control characters.
+const clean = s => String(s).replace(/[\x00-\x1f\x7f-\x9f]/g, '');
 const mark = { good: '✓', info: '·', warn: '!', bad: '✗', skip: '–' };
-process.stdout.write(`\nWebPawlice ${report.domain}  overall ${report.overall}\n`);
+process.stdout.write(`\nWebPawlice ${clean(report.domain)}  overall ${report.overall}\n`);
 for (const [k, q] of Object.entries(AREAS)) {
   process.stdout.write(`\n${q} ${report.areas[k] ?? '—'}\n`);
-  for (const r of report.results.filter(x => x.area === k)) process.stdout.write(`  ${mark[r.status]} ${r.name}: ${r.finding}\n`);
+  for (const r of report.results.filter(x => x.area === k)) process.stdout.write(`  ${mark[r.status]} ${clean(r.name)}: ${clean(r.finding)}\n`);
 }
 process.stdout.write('\n');
