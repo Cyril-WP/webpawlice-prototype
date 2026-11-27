@@ -1,24 +1,18 @@
 {
   "python.org": {
-    "checkedAt": "2026-11-26",
+    "checkedAt": "2026-11-27",
     "checked": 35,
     "found": {
-      "ppython.org": {
-        "mail": false
-      },
-      "pyhon.org": {
-        "mail": true
-      },
-      "ython.org": {
-        "mail": false
-      },
       "pyython.org": {
         "mail": true
       },
       "pthon.org": {
         "mail": true
       },
-      "pyton.org": {
+      "pyhon.org": {
+        "mail": true
+      },
+      "ython.org": {
         "mail": false
       },
       "pyhton.org": {
@@ -27,31 +21,37 @@
       "pytohn.org": {
         "mail": true
       },
+      "pythn.org": {
+        "mail": true
+      },
+      "ppython.org": {
+        "mail": false
+      },
       "pytthon.org": {
         "mail": true
       },
-      "pythoon.org": {
-        "mail": true
+      "pyton.org": {
+        "mail": false
       },
       "pythhon.org": {
         "mail": false
       },
-      "pythn.org": {
-        "mail": true
-      },
-      "pytho.org": {
-        "mail": true
-      },
-      "pyth0n.org": {
+      "pythoon.org": {
         "mail": true
       },
       "python.co": {
         "mail": false
       },
-      "pythno.org": {
+      "pytho.org": {
         "mail": true
       },
       "python.shop": {
+        "mail": true
+      },
+      "pythno.org": {
+        "mail": true
+      },
+      "pyth0n.org": {
         "mail": true
       },
       "python.online": {
